@@ -9,5 +9,6 @@ install:
   - dblog
   - page_cache
   - dynamic_page_cache
+  - node_type_example
 themes:
   - stark
