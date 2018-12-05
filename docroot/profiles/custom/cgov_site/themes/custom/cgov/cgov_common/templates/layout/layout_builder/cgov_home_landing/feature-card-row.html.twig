@@ -1,0 +1,16 @@
+{%
+  set classes = [
+  'layout',
+  'layout--nci',
+]
+%}
+{% if content %}
+  <div{{ attributes.addClass(classes) }}>
+    {% if content.card %}
+      <div {{ region_attributes.card.addClass('layout__region', 'layout__region--card') }}>
+        {{ content.card }}
+      </div>
+    {% endif %}
+
+  </div>
+{% endif %}

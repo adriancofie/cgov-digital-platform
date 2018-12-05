@@ -1,0 +1,74 @@
+primary_feature_card_row:
+  label: 'Primary Feature Card Row'
+  path: templates/layout/layout_builder
+  template: cgov_home_landing/feature-card-row
+  library:
+  category: 'Columns: 3'
+  default_region: cards
+  icon_map:
+    - [cards]
+  regions:
+    cards:
+      label: Cards
+secondary_feature_card_row:
+  label: 'Secondary Feature Card Row'
+  path: templates/layout/layout_builder
+  template: cgov_home_landing/secondary-feature-card-row
+  library:
+  category: 'Columns: 3'
+  default_region: cards
+  icon_map:
+    - [cards]
+  regions:
+    cards:
+      label: Cards
+guide_card_row:
+  label: 'Guide Card Row'
+  path: templates/layout/layout_builder
+  template: cgov_home_landing/guide-card-row
+  library:
+  category: 'Columns: 3'
+  default_region: cards
+  icon_map:
+    - [cards]
+  regions:
+    cards:
+      label: Cards
+multimedia_row:
+  label: 'Multimedia Row'
+  path: templates/layout/layout_builder
+  template: cgov_home_landing/multimedia-row
+  library:
+  category: 'Columns: 3'
+  default_region: cards
+  icon_map:
+    - [cards]
+  regions:
+    cards:
+      label: Cards
+thumbnail_row:
+  label: 'Thumbnail Row'
+  path: templates/layout/layout_builder
+  template: cgov_home_landing/thumbnail-row
+  library:
+  category: 'Columns: 3'
+  default_region: cards
+  icon_map:
+    - [cards]
+  regions:
+    cards:
+      label: Cards
+news_and_events_row:
+  label: templates/layout/layout_builder
+  path: templates/layout/layout_builder
+  template: cgov_home_landing/news-and-events-row
+  library:
+  category: 'Columns: 3'
+  default_region: cards
+  icon_map:
+    - [cards]
+  regions:
+    cards:
+      label: Cards
+    raw_html:
+      label: Raw HTML Block
