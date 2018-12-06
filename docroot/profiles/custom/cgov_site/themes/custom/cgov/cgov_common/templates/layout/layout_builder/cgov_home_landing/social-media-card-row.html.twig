@@ -6,14 +6,18 @@
 %}
 
 {% if content %}
-<div id="ctl39_nvcgSlLayoutThumbnailA" class="row card-thumbnail">
+<div class="rawHtml">
   <div{{ attributes.addClass(classes) }}>
     {% if content.card %}
       <div {{ region_attributes.card.addClass('layout__region', 'layout__region--card') }}>
         {{ content.card }}
       </div>
     {% endif %}
-
   </div>
 </div>
 {% endif %}
+
+
+
+
+

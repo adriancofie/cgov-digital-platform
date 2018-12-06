@@ -4,13 +4,15 @@
   'layout--nci',
 ]
 %}
+
 {% if content %}
+<div class="multimedia-slot">
+  <div class="row multimedia flex-columns">
   <div{{ attributes.addClass(classes) }}>
     {% if content.card %}
       <div {{ region_attributes.card.addClass('layout__region', 'layout__region--card') }}>
         {{ content.card }}
       </div>
     {% endif %}
-
   </div>
 {% endif %}

@@ -4,7 +4,10 @@
   'layout--nci',
 ]
 %}
+
 {% if content %}
+<div class="accordion">
+<div id="ctl35_nvcgSlLayoutGuideB" class="nvcgSlLayoutGuideB row guide-card guide-card--home flex-columns">
   <div{{ attributes.addClass(classes) }}>
     {% if content.card %}
       <div {{ region_attributes.card.addClass('layout__region', 'layout__region--card') }}>
@@ -13,4 +16,6 @@
     {% endif %}
 
   </div>
+</div>
+</div>
 {% endif %}

@@ -5,6 +5,7 @@
 ]
 %}
 {% if content %}
+<div id="ctl33_nvcgSlLayoutFeatureA" class="row feature-primary flex-columns">
   <div{{ attributes.addClass(classes) }}>
     {% if content.card %}
       <div {{ region_attributes.card.addClass('layout__region', 'layout__region--card') }}>
@@ -13,4 +14,5 @@
     {% endif %}
 
   </div>
+</div>
 {% endif %}
