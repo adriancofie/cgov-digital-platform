@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.full
     - field.field.node.cgov_home_landing.field_browser_title
     - field.field.node.cgov_home_landing.field_card_title
     - field.field.node.cgov_home_landing.field_date_display_mode
@@ -18,10 +19,10 @@ dependencies:
     - datetime
     - options
     - user
-id: node.cgov_home_landing.default
+id: node.cgov_home_landing.full
 targetEntityType: node
 bundle: cgov_home_landing
-mode: default
+mode: full
 content:
   content_moderation_control:
     weight: -20
