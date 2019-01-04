@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: hero_banner
+label: 'Hero Banner'
+revision: 1
+description: 'This is a hero banner with text and 2 images, one for desktop, one for tablet.'
