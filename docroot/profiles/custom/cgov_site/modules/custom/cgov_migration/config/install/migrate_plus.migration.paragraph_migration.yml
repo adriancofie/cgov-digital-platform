@@ -29,7 +29,10 @@ source:
 
 
 process:
- field_body_section_content: field_body_section_content
+ field_body_section_content/value: field_body_section_content
+ field_body_section_content/format:
+   plugin: default_value
+   default_value: full_html
  field_body_section_heading: field_body_section_heading
  id: para_id
 

@@ -1,18 +1,18 @@
-id: sitesection_migration
+id: sitesectionsql_migration
 label: 'taxonomy sitesection migration'
 source:
   plugin: url
   data_fetcher_plugin: file
   data_parser_plugin: xml
-  urls: /var/www/private-files-mig/sitesection.xml
-  item_selector: /nodes/node
+  urls: /var/www/private-files-mig/sitesectionsql.xml
+  item_selector: /rows/row
 
- 
+
   fields:
         -
          name: term_id
          label: term_id
-         selector: id
+         selector: term_id
 
 
         -
@@ -24,40 +24,39 @@ source:
          name: name
          label: name
          selector: name
+        -
+         name: parent
+         label: parent
+         selector: parent
 
         -
          name: field_pretty_url
          label: field_pretty_url
-         selector: field_pretty_url         
+         selector: field_pretty_url
 
         -
          name: field_section_nav_root
          label: field_section_nav_root
-         selector: field_section_nav_root     
+         selector: field_section_nav_root
 
         -
          name: field_navigation_label
          label: field_navigation_label
-         selector: field_navigation_label    
+         selector: field_navigation_label
         -
          name: field_mega_menu_content
          label: field_mega_menu_content
-         selector: field_mega_menu_content       
-
-        -
-         name: field_parent_target_id
-         label: field_parent_target_id
-         selector: field_parent_target_id       
+         selector: field_mega_menu_content
 
 
         -
-         name: field_show_in_navigation
-         label: field_show_in_navigation
-         selector: field_show_in_navigation    
+         name: field_navigation_display_options
+         label: field_navigation_display_options
+         selector: field_navigation_display_options
         -
          name: langcode
          label: langcode
-         selector: langcode         
+         selector: langcode
         -
          name: field_breadcrumb_root
          label: field_breadcrumb_root
@@ -72,17 +71,14 @@ source:
         -
          name: field_levels_to_display
          label: field_levels_to_display
-         selector: field_levels_to_display         
+         selector: field_levels_to_display
 
         -
          name: field_main_nav_root
          label: field_main_nav_root
          selector: field_main_nav_root
 
-        -
-         name: field_site_section_name
-         label: field_site_section_name
-         selector: field_site_section_name
+
 
 
 
@@ -94,6 +90,20 @@ source:
 process:
   tid: term_id
   name: name
+
+
+  vid:
+   plugin: default_value
+   default_value: cgov_site_sections
+
+  parent_target_id:
+    plugin: migration_lookup
+    migration: sitesectiontax_migration
+    source: parent
+    no_stub: true
+
+
+
   field_breadcrumb_root: field_breadcrumb_root
   field_landing_page: field_landing_page
   field_levels_to_display: field_levels_to_display
@@ -102,10 +112,11 @@ process:
   field_navigation_label: field_navigation_label
   field_pretty_url: field_pretty_url
   field_section_nav_root: field_section_nav_root
-  field_show_in_navigation: field_show_in_navigation
-  field_site_section_name: field_site_section_name
-  field_parent_target_id: field_parent_target_id
-  
+  field_navigation_display_options: field_navigation_display_options
+
+
+
 destination:
   plugin: entity:taxonomy_term
   default_bundle: cgov_site_sections
+  overwrite_properties: parent
