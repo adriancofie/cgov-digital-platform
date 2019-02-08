@@ -94,9 +94,10 @@ process:
 
   parent:
     plugin: migration_lookup
-    migration: sitesectiontax_migration
+    migration: sitesection_migration
     source: parent
     no_stub: true
+
 
 
 
@@ -117,5 +118,7 @@ destination:
   default_bundle: cgov_site_sections
   overwrite_properties: parent
 
+
 migration_dependencies:
-  required: sitesectiontax_migration
+  required:
+    - sitesection_migration

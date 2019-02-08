@@ -64,10 +64,14 @@ source:
          selector: term_id
 
         -
+         name: paragraphs
+         label: paragraphs
+         selector: paragraphs
+
+        -
          name: para_id
          label: para_id
-         selector: para_id
-
+         selector: paragraphs/para_id
 
         -
          name: field_pretty_url
@@ -96,30 +100,31 @@ process:
 
   field_site_section:
     plugin: migration_lookup
-    migration: sitesection_migration
+    migration: sitesectiontax_migration
     source: term_id
+    no_stub: true
 
   field_pretty_url: field_pretty_url
-
-  field_article_body:
-   plugin: iterator
-   source: field_body_section_content/value
-   process:
-     temporary_ids:
-       plugin: migration_lookup
-       migration: paragraph_migration
-       source: para_id
-     target_id:
-       plugin: extract
-       source: '@temporary_ids'
-       index:
-         - 0
-     target_revision_id:
-       plugin: extract
-       source: '@temporary_ids'
-       index:
-         - 1
-
+  field_article_body/target_id:
+    -
+      plugin: migration_lookup
+      migration: paragraph_migration
+      no_stub: true
+      source: para_id
+    -
+      plugin: extract
+      index:
+        - '0'
+  field_article_body/target_revision_id:
+    -
+      plugin: migration_lookup
+      migration: paragraph_migration
+      no_stub: true
+      source: para_id
+    -
+      plugin: extract
+      index:
+        - 1
 
 
 destination:

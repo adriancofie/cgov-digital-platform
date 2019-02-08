@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nodes>
 <node>
-    <id>110 </id>
+    <id>111 </id>
     <langcode> en </langcode>
     <title>    page xml para1 title     </title>
     <field_search_engine_restrictions> ExcludeSearch</field_search_engine_restrictions>
@@ -12,9 +12,11 @@
       <field_date_posted> 2017-01-02 </field_date_posted>
       <field_date_reviewed> 2017-01-02 </field_date_reviewed>
       <field_date_updated>2017-01-02 </field_date_updated>
-
-      <para_id>18</para_id>
-      <term_id>132 </term_id>
+      <paragraphs>
+        <para_id>18</para_id>
+        <para_id>19</para_id>
+      </paragraphs>
+      <term_id>133 </term_id>
       <field_pretty_url> articlepara2 </field_pretty_url>
 
 </node>
