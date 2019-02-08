@@ -1,6 +1,9 @@
 id: article_migration
 label: 'Custom article migration'
 source:
+  constants:
+    rid: 5
+
   plugin: url
   data_fetcher_plugin: file
   data_parser_plugin: xml
@@ -19,7 +22,7 @@ source:
         -
          name: langcode
          label: langcode
-         selector: langcode         
+         selector: langcode
         -
          name: field_search_engine_restrictions
          label: field_search_engine_restrictions
@@ -34,7 +37,7 @@ source:
         -
          name: field_intro_text
          label: field_intro_text
-         selector: field_intro_text         
+         selector: field_intro_text
 
 
         -
@@ -54,6 +57,10 @@ source:
          name: field_date_posted
          label: field_date_posted
          selector: field_date_posted
+        -
+         name: field_date_reviewed
+         label: field_date_reviewid
+         selector: field_date_reviewed
 
         -
          name: term_id
@@ -61,9 +68,19 @@ source:
          selector: term_id
 
         -
+         name: paragraphs
+         label: paragraphs
+         selector: paragraphs
+
+        -
+         name: para_id
+         label: para_id
+         selector: paragraphs/para_id
+
+        -
          name: field_pretty_url
          label: field_pretty_url
-         selector: field_pretty_url         
+         selector: field_pretty_url
 
 
 
@@ -83,14 +100,40 @@ process:
   field_date_updated: field_date_updated
   field_search_engine_restrictions: field_search_engine_restrictions
   field_public_use: field_public_use
-  
+  field_intro_text/content: field_intro_text
+  field_intro_text/format:
+   plugin: default_value
+   default_value: full_html
+
 
   field_site_section:
     plugin: migration_lookup
-    migration: sitesection_migration
+    migration: sitesectiontax_migration
     source: term_id
+    no_stub: true
 
   field_pretty_url: field_pretty_url
+  field_article_body/target_id:
+    -
+      plugin: migration_lookup
+      migration: paragraph_migration
+      no_stub: true
+      source: para_id
+    -
+      plugin: extract
+      index:
+        - '0'
+  field_article_body/target_revision_id:
+    -
+      plugin: migration_lookup
+      migration: paragraph_migration
+      no_stub: true
+      source: para_id
+    -
+      plugin: extract
+      index:
+        - 1
+
 
 destination:
   plugin: entity:node
@@ -98,4 +141,5 @@ destination:
 
 migration_dependencies:
   required:
-    - sitesection_migration
+    - sitesectiontax_migration
+    - paragraph_migration
