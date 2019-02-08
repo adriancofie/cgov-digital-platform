@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nodes>
 <node>
-    <id>111</id>
+    <id>99</id>
     <langcode>en</langcode>
-    <title>page xml para2 title</title>
+    <title>title 99</title>
     <field_search_engine_restrictions>ExcludeSearch</field_search_engine_restrictions>
     <field_intro_text>intro text 5</field_intro_text>
       <field_public_use>0</field_public_use>
@@ -15,6 +15,7 @@
       <para_id>18</para_id>
       <term_id>940259</term_id>
       <field_pretty_url>articlepara2</field_pretty_url>
+      <field_date_display_mode>posted</field_date_display_mode>
 
 </node>
 

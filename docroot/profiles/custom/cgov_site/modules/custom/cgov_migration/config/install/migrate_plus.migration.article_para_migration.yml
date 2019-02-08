@@ -75,13 +75,17 @@ source:
         -
          name: para_id
          label: para_id
-         selector: paragraphs/para_id
+         selector: para_id
 
         -
          name: field_pretty_url
          label: field_pretty_url
          selector: field_pretty_url
 
+        -
+         name: field_date_display_mode
+         label: field_date_display_mode
+         selector: field_date_display_mode
 
 
 
@@ -100,7 +104,7 @@ process:
   field_date_updated: field_date_updated
   field_search_engine_restrictions: field_search_engine_restrictions
   field_public_use: field_public_use
-  field_intro_text/content: field_intro_text
+  field_intro_text/value: field_intro_text
   field_intro_text/format:
    plugin: default_value
    default_value: full_html
