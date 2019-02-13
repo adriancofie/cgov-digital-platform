@@ -2,16 +2,16 @@
 <paragraphs>
 <paragraph>
     <para_id>18</para_id>
-
+    <langcode>en</langcode>
     <content> <![CDATA[ <p> this is paragraph </p> ]]></content>
     <heading> <![CDATA[ <p> this is heading </p> ]]></heading>
 </paragraph>
 
 <paragraph>
     <para_id>19</para_id>
-
-    <content> <![CDATA[ <p> this is paragraph 1 </p> ]]></content>
-    <heading> <![CDATA[ <p> this is heading 1</p> ]]></heading>
+    <langcode>es</langcode>
+    <content> <![CDATA[<p> paragraph 2 </p> ]]></content>
+    <heading> <![CDATA[<p> heading 2 </p> ]]></heading>
 </paragraph>
 
 </paragraphs>

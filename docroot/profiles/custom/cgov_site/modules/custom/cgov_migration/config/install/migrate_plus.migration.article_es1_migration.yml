@@ -1,4 +1,4 @@
-id: article_para1_migration
+id: article_es1_migration
 label: 'Custom article migration'
 source:
   constants:
@@ -7,7 +7,7 @@ source:
   plugin: url
   data_fetcher_plugin: file
   data_parser_plugin: xml
-  urls: /var/www/private-files-mig/article_para1.xml
+  urls: /var/www/private-files-mig/article_es.xml
   item_selector: /nodes/node
   fields:
         -
@@ -75,7 +75,7 @@ source:
         -
          name: para_id
          label: para_id
-         selector: paragraphs/para_id
+         selector: para_id
 
         -
          name: field_pretty_url
@@ -95,7 +95,16 @@ source:
       type: integer
 
 process:
-  nid: id
+  nid:
+    plugin: migration_lookup
+    source: id
+    migration: article_migration
+
+  langcode:
+    plugin: default_value
+    default_value: 'es'
+
+
   title: title
   field_short_title: field_short_title
   field_page_description: field_page_description
@@ -118,32 +127,38 @@ process:
 
   field_pretty_url: field_pretty_url
 
-  field_article_body:
-   plugin: iterator
-   source: paragraphs
-   process:
-     temporary_ids:
-       plugin: migration_lookup
-       migration: paragraph_migration
-       source: para_id
-     target_id:
-       plugin: extract
-       source: '@temporary_ids'
-       index:
-         - 0
-     target_revision_id:
-       plugin: extract
-       source: '@temporary_ids'
-       index:
-         - 1
+
+  field_article_body/target_id:
+    -
+      plugin: migration_lookup
+      migration: paragraph_migration
+      no_stub: true
+      source: para_id
+    -
+      plugin: extract
+      index:
+        - '0'
+  field_article_body/target_revision_id:
+    -
+      plugin: migration_lookup
+      migration: paragraph_migration
+      no_stub: true
+      source: para_id
+    -
+      plugin: extract
+      index:
+        - 1
+
 
 
 
 destination:
   plugin: entity:node
   default_bundle: cgov_article
+  translations: true
 
 migration_dependencies:
   required:
     - sitesectionsql_migration
     - paragraph_migration
+    - article_migration
