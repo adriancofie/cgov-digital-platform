@@ -8,7 +8,7 @@ source:
   data_fetcher_plugin: file
   data_parser_plugin: xml
   urls: /var/www/private-files-mig/article_para.xml
-  item_selector: /nodes/node
+  item_selector: /rows/row
   fields:
         -
          name: id
