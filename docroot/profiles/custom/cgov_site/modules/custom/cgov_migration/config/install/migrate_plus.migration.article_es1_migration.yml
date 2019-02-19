@@ -1,8 +1,6 @@
 id: article_es1_migration
 label: 'Custom article migration'
 source:
-  constants:
-    rid: 5
 
   plugin: url
   data_fetcher_plugin: file
