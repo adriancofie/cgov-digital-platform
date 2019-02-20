@@ -1,12 +1,13 @@
-id: article_para_migration
-label: 'Custom article migration'
+id: article_internallink_migration
+label: 'Custom internal link migration'
 source:
-
+  constants:
+    rid: 5
 
   plugin: url
   data_fetcher_plugin: file
   data_parser_plugin: xml
-  urls: /var/www/private-files-mig/article_para.xml
+  urls: /var/www/private-files-mig/article_internallink.xml
   item_selector: /nodes/node
   fields:
         -
@@ -53,6 +54,18 @@ source:
 
 
         -
+         name: field_list_description
+         label: field_list_description
+         selector: field_list_description
+
+
+        -
+         name: field_feature_card_description
+         label: field_feature_card_description
+         selector: field_feature_card_description
+
+
+        -
          name: field_date_posted
          label: field_date_posted
          selector: field_date_posted
@@ -86,7 +99,10 @@ source:
          label: field_date_display_mode
          selector: field_date_display_mode
 
-
+        -
+         name: internallink_id
+         label: internallink_id
+         selector: internallink_id
 
 
   ids:
@@ -98,6 +114,8 @@ process:
   title: title
   field_short_title: field_short_title
   field_page_description: field_page_description
+  field_list_description: field_list_description
+  field_feature_card_description: field_feature_card_description
   field_date_posted: field_date_posted
   field_date_reviewed: field_date_reviewed
   field_date_updated: field_date_updated
@@ -138,6 +156,30 @@ process:
         - 1
 
 
+  field_related_resources/target_id:
+    -
+      plugin: migration_lookup
+      migration: internallink_migration
+      no_stub: true
+      source: internallink_id
+    -
+      plugin: extract
+      index:
+        - '0'
+  field_related_resources/target_revision_id:
+    -
+      plugin: migration_lookup
+      migration: internallink_migration
+      no_stub: true
+      source: internallink_id
+    -
+      plugin: extract
+      index:
+        - 1
+
+
+
+
 destination:
   plugin: entity:node
   default_bundle: cgov_article
@@ -145,4 +187,4 @@ destination:
 migration_dependencies:
   required:
     - sitesectionsql_migration
-    - paragraph_migration
+    - internallink_migration
