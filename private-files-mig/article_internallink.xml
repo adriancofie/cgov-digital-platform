@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nodes>
-<node>
+<rows>
+<row>
     <id>101</id>
     <langcode>en</langcode>
     <title>related resource</title>
@@ -19,7 +19,7 @@
       <field_pretty_url>articlepara2</field_pretty_url>
       <field_date_display_mode>posted</field_date_display_mode>
 
-</node>
+</row>
 
 
-</nodes>
+</rows>

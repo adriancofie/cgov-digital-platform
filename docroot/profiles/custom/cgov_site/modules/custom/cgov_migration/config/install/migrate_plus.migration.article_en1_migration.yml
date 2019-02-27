@@ -1,13 +1,12 @@
-id: article_internallink_migration
-label: 'Custom internal link migration'
+id: article_en1_migration
+label: 'Custom article migration'
 source:
-  constants:
-    rid: 5
+
 
   plugin: url
   data_fetcher_plugin: file
   data_parser_plugin: xml
-  urls: /var/www/private-files-mig/article_internallink.xml
+  urls: /var/www/private-files-mig/article_en_internallink.xml
   item_selector: /rows/row
   fields:
         -
@@ -54,18 +53,6 @@ source:
 
 
         -
-         name: field_list_description
-         label: field_list_description
-         selector: field_list_description
-
-
-        -
-         name: field_feature_card_description
-         label: field_feature_card_description
-         selector: field_feature_card_description
-
-
-        -
          name: field_date_posted
          label: field_date_posted
          selector: field_date_posted
@@ -99,11 +86,18 @@ source:
          label: field_date_display_mode
          selector: field_date_display_mode
 
+
         -
          name: internallink_id
          label: internallink_id
          selector: internallink_id
 
+
+
+        -
+         name: internallink_ids
+         label: internallink_ids
+         selector: internallink_ids
 
   ids:
     id:
@@ -114,8 +108,6 @@ process:
   title: title
   field_short_title: field_short_title
   field_page_description: field_page_description
-  field_list_description: field_list_description
-  field_feature_card_description: field_feature_card_description
   field_date_posted: field_date_posted
   field_date_reviewed: field_date_reviewed
   field_date_updated: field_date_updated
@@ -134,10 +126,12 @@ process:
     no_stub: true
 
   field_pretty_url: field_pretty_url
+
+
   field_article_body/target_id:
     -
       plugin: migration_lookup
-      migration: paragraph_migration
+      migration: paragraph_en_migration
       no_stub: true
       source: para_id
     -
@@ -147,7 +141,7 @@ process:
   field_article_body/target_revision_id:
     -
       plugin: migration_lookup
-      migration: paragraph_migration
+      migration: paragraph_en_migration
       no_stub: true
       source: para_id
     -
@@ -155,28 +149,42 @@ process:
       index:
         - 1
 
+  temp_text:
+    plugin: migration_lookup
+    migration: internallinksql_migration
+    no_stub: true
+    source: internallink_ids
+
+  field_related_resources:
+    plugin: iterator
+    source: '@temp_text'
+
+    process:
+      target_id: '0'
+      target_revision_id: '1'
+
 
   field_related_resources/target_id:
     -
       plugin: migration_lookup
-      migration: internallink_migration
+      migration: internallinksql_migration
       no_stub: true
       source: internallink_id
     -
       plugin: extract
       index:
         - '0'
+
   field_related_resources/target_revision_id:
     -
       plugin: migration_lookup
-      migration: internallink_migration
+      migration: internallinksql_migration
       no_stub: true
       source: internallink_id
     -
       plugin: extract
       index:
         - 1
-
 
 
 
@@ -187,4 +195,5 @@ destination:
 migration_dependencies:
   required:
     - sitesectionsql_migration
-    - internallink_migration
+    - paragraph_en_migration
+    - internallinksql_migration
