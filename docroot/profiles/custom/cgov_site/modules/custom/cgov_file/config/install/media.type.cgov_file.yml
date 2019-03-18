@@ -14,5 +14,4 @@ queue_thumbnail_downloads: false
 new_revision: false
 source_configuration:
   source_field: field_media_file
-field_map:
-  filesize: field_file_attachment_size
+field_map: {  }
