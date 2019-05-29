@@ -195,6 +195,8 @@ process:
       source: field_intro_text
     -
       plugin: generate_placeholders
+    -
+      plugin: replace_links
   field_intro_text/format:
    plugin: default_value
    default_value: streamlined

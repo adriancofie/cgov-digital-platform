@@ -59,6 +59,8 @@ process:
      source: field_cthp_guide_card_desc
    -
      plugin: generate_placeholders
+   -
+     plugin: replace_links
 
  field_cthp_guide_card_desc/format:
      plugin: default_value

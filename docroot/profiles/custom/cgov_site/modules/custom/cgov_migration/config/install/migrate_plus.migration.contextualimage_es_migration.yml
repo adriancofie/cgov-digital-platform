@@ -66,6 +66,8 @@ process:
       source: field_caption
     -
       plugin: generate_placeholders
+    -
+      plugin: replace_links
   field_caption/format:
      plugin: default_value
      default_value: simple

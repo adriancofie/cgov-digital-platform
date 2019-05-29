@@ -53,6 +53,8 @@ process:
       source: field_html_content
     -
       plugin: generate_placeholders
+    -
+      plugin: replace_links
   field_raw_html/format:
    plugin: default_value
    default_value: raw_html

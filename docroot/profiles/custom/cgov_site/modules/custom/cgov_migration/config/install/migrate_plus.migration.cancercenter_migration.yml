@@ -252,6 +252,8 @@ process:
       source: body
     -
       plugin: generate_placeholders
+    -
+      plugin: replace_links
   body/format:
    plugin: default_value
    default_value: full_html

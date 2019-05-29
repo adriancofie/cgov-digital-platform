@@ -195,6 +195,8 @@ process:
       source: field_about_blog
     -
       plugin: generate_placeholders
+    -
+      plugin: replace_links
   field_about_blog/format:
    plugin: default_value
    default_value: streamlined

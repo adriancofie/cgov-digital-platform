@@ -184,6 +184,8 @@ process:
       source: field_about_blog
     -
       plugin: generate_placeholders
+    -
+      plugin: replace_links
   field_archive_back_years: field_archive_back_years
   field_archive_group_by: field_archive_group_by
 
