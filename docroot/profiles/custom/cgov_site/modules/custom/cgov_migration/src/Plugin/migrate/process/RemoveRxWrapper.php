@@ -2,7 +2,6 @@
 
 namespace Drupal\cgov_migration\Plugin\migrate\process;
 
-use Drupal\migrate\MigrateSkipRowException;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
 
@@ -29,23 +28,11 @@ class RemoveRxWrapper extends CgovPluginBase {
       return NULL;
     }
 
+    echo($value . PHP_EOL . '!!!!!!OGVALUE' . PHP_EOL . PHP_EOL);
     $pid = $this->getPercID($row);
 
     // Load the incoming HTML.
     $this->doc->html($value);
-
-    // Log a warning if the rxbody div isn't the first element.
-    $root = $this->doc->find('html');
-    $children = $root->find('body')->children();
-
-    if ($children->count() > 0) {
-      $isFirstRx = $children->first()->hasClass('rxbodyfield');
-
-      if (!$isFirstRx) {
-        $message = 'RxBodyfield is not the first element.';
-        $this->migLog->logMessage($pid, $message, E_WARNING);
-      }
-    }
 
     // Find elements with the class.
     $elements = $this->doc->find('.rxbodyfield');
@@ -54,14 +41,14 @@ class RemoveRxWrapper extends CgovPluginBase {
     // Log an throw an error if there is more than one.
     if ($size > 1) {
       $message = 'The incoming item has ' . $size . ' .rxbodyfield items.';
-      $this->migLog->logMessage($pid, $message, E_ERROR);
+      echo('The incoming item has size: ' . $size);
+      $this->migLog->logMessage($pid, $message, E_ERROR, 'RXBODY');
       throw new MigrateSkipRowException();
     }
-    elseif ($size > 0) {
+    elseif ($size == 1) {
       // Retrieve the content.
       $value = $elements->first()->html();
     }
-
     return $value;
   }
 
