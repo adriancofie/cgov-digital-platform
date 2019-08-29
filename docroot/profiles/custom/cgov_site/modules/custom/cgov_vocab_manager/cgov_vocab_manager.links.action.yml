@@ -1,0 +1,5 @@
+entity.taxonomy_term.add_form:
+  route_name: entity.taxonomy_term.add_form
+  title: 'Add term'
+  appears_on:
+    - entity.taxonomy_vocabulary.overview_onelevel_form
