@@ -207,7 +207,7 @@ class SectionNav extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getCacheMaxAge() {
-    return 300;
+    return 0;
   }
 
 }
