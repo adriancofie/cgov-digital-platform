@@ -96,6 +96,50 @@ function cgov_site_section_taxonomy_term_presave(EntityInterface $entity) {
 
 /**
  * Implements hook_ENTITY_TYPE_update().
+ */
+function cgov_site_section_entity_update(EntityInterface $entity) {
+
+  $entityType = $entity->getEntityType()->id();
+
+  // If this is a Site Sectiion, invalidate if it meets the criteria for
+  // cache tag invalidation.
+  if ($entityType === 'taxonomy_term' && $entity->hasField('field_site_section')) {
+    if (_will_trigger_cache_tag_invalidation($entity)) {
+      invalidate_section_cache_tag($entity);
+    }
+  }
+
+  /*
+   * If this is a node or media item  and has changed its section parent or
+   * pretty url name, if it displays in navigation, cascade those changes
+   *  to any subsections and pages within those subsections.
+   *
+   * In the event the section parent has changed, the new section root must
+   * also invalidate it's cache tag.
+   */
+
+  if ($entity->getEntityTypeId() === 'node' || $entity->getEntityTypeId() === 'media') {
+    if ($entity->hasField('field_site_section')) {
+      if (_will_trigger_cache_tag_invalidation($entity)) {
+        // Get the Section IDs where its a landing page..
+        // Note: This could be none.
+        $query = \Drupal::entityQuery('taxonomy_term')
+          ->condition('vid', 'cgov_site_sections')
+          ->condition('field_section_nav_root', 1)
+          ->condition('field_landing_page.target_id', $entity->id());
+
+        $tids = $query->execute();
+        // For each nav root, invalidate it's cache tag.
+        foreach ($tids as $section_root) {
+          invalidate_section_cache_tag($section_root);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
  *
  * If a term has either changed its parent or pretty url name,
  * then we need to cascade those changes to any subsections and
@@ -125,7 +169,7 @@ function cgov_site_section_taxonomy_term_update(EntityInterface $entity) {
     save_term_children($entity);
   }
   // Determine if this term update meets the criteria for tag invalidation.
-  if (will_trigger_cache_tag_invalidation($entity)) {
+  if (_will_trigger_cache_tag_invalidation($entity)) {
     invalidate_section_cache_tag($entity);
   }
 
@@ -143,7 +187,7 @@ function cgov_site_section_taxonomy_term_update(EntityInterface $entity) {
 function invalidate_section_cache_tag(EntityInterface $site_section_entity) {
   $section_id = $site_section_entity->id();
   // Get the sections ID and invalidate the cache tag.
-  if ($section_id > 0) {
+  if ($section_id) {
     Cache::invalidateTags(['site_section:' . $section_id]);
   }
 }
@@ -155,7 +199,8 @@ function invalidate_section_cache_tag(EntityInterface $site_section_entity) {
  *   The site section entity with its pending value updates.
  */
 function save_term_children(EntityInterface $updated_section_entity) {
-  $term_storage = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term");
+  $term_storage = \Drupal::service('entity_type.manager')
+    ->getStorage("taxonomy_term");
   // Update immediate child sections.
   $subsections = $term_storage->loadChildren($updated_section_entity->id(), 'cgov_site_sections');
 
@@ -176,25 +221,20 @@ function save_term_children(EntityInterface $updated_section_entity) {
  *   A TRUE or FALSE as to whether to trigger a re-save.
  */
 function will_trigger_save_children(EntityInterface $updated_section_entity) {
-  // Store the original entity for comparison.
-  $original_section_entity = $updated_section_entity->original;
 
-  if (
-    $original_section_entity->get('computed_path')->value === $updated_section_entity->get('computed_path')->value &&
-    $original_section_entity->get('parent')->target_id === $updated_section_entity->get('parent')->target_id &&
-    $original_section_entity->get('field_pretty_url')->value === $updated_section_entity->get('field_pretty_url')->value &&
-    $original_section_entity->get('langcode')->value === $updated_section_entity->get('langcode')->value
-  ) {
-    return FALSE;
-  }
-  return TRUE;
+  $fields = [
+    'computed_path',
+    'parent',
+    'field_pretty_url',
+    'langcode',
+  ];
+  return entity_fields_modified($fields, $updated_section_entity);
 }
 
 /**
- * Determine if an updated Site Section should trigger a cache tag invalidation.
+ * Determine if an entity should trigger a cache tag invalidation.
  *
- * Circumstances that trigger a cache tag invalidation.
- * One of the following is changed:
+ * Fields which trigger a cache tag invalidation for a section when modified:
  *  name
  *  field_landing_page
  *  field_pretty_url
@@ -203,28 +243,97 @@ function will_trigger_save_children(EntityInterface $updated_section_entity) {
  *  field_navigation_display_options
  *  weight.
  *
- * @param \Drupal\Core\Entity\EntityInterface $updated_section_entity
- *   The site section entity with its pending value updates.
+ * For a node or media item:
+ * field_site_section
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $updated_entity
+ *   The entity just updated.
  *
  * @return bool
  *   A TRUE or FALSE as to whether to trigger a cache clear.
  */
-function will_trigger_cache_tag_invalidation(EntityInterface $updated_section_entity) {
+function _will_trigger_cache_tag_invalidation(EntityInterface $updated_entity) {
+  $values = [];
 
+  // Invalidation Check For Nodes/Media.
+  if ($updated_entity->getEntityTypeId() === 'node' || $updated_entity->getEntityTypeId() === 'media') {
+    // Exit early if this entity doesn't have site sections.
+    if ($updated_entity->hasField('field_site_section')) {
+      return FALSE;
+    }
+    // Set entity Fields which trigger invalidation when modified.
+    $values =
+      [
+        'field_site_section',
+      ];
+  }
+
+  // Invalidation Check for Site Sections.
+  if ($updated_entity->getEntityTypeId() === 'taxonomy_term' &&
+    $updated_entity->bundle() == 'cgov_site_sections') {
+    $weightModified = $updated_entity->original->getWeight() !== $updated_entity->getWeight();
+    // Early exit if weight modified.
+    if ($weightModified) {
+      return TRUE;
+    }
+
+    // Set Site Section Fields which trigger invalidation.
+    $values =
+      [
+        'name',
+        'field_landing_page',
+        'field_pretty_url',
+        'field_section_nav_root',
+        'field_navigation_label',
+        'field_navigation_display_options',
+      ];
+  }
+  // Compare the values and check if any have been modified.
+  return entity_fields_modified($values, $updated_entity);
+}
+
+/**
+ * Checks to see if an entities values have changed compared to it's original.
+ *
+ * @param array $fields
+ *   The fields which trigger a cache invalidation.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The updated entity.
+ *
+ * @return bool
+ *   A TRUE or FALSE as to whether the fields were modified.
+ */
+function entity_fields_modified(array $fields, EntityInterface $entity) {
   // Store the original entity for comparison.
-  $original_section_entity = $updated_section_entity->original;
+  $original = $entity->original;
 
-  if (
-    $original_section_entity->name->value !== $updated_section_entity->name->value ||
-    $original_section_entity->get('field_landing_page')->value !== $updated_section_entity->get('field_landing_page')->value ||
-    $original_section_entity->get('field_pretty_url')->value !== $updated_section_entity->get('field_pretty_url')->value ||
-    $original_section_entity->get('field_section_nav_root')->target_id !== $updated_section_entity->get('field_section_nav_root')->target_id ||
-    $original_section_entity->get('field_navigation_label')->value !== $updated_section_entity->get('field_navigation_label')->value ||
-    $original_section_entity->get('field_navigation_display_options')->value !== $updated_section_entity->get('field_navigation_display_options')->value ||
-    $original_section_entity->getWeight() !== $updated_section_entity->getWeight()
+  // Setup closures for comparison functions.
+  $get_er_value = function ($field_name) use ($entity, $original) {
+    // Type-casting since original target ID returns a string instead of a num.
+    return (int) $original->get($field_name)->target_id !== $entity->get($field_name)->target_id;
+  };
+  $get_value = function ($field_name) use ($entity, $original) {
+    return $original->get($field_name)->value !== $entity->get($field_name)->value;
+  };
 
-  ) {
-    return TRUE;
+  // Loop though the given fields to check for modification.
+  foreach ($fields as $field_name) {
+    $field_type = $entity->get($field_name)->getFieldDefinition()->getType();
+
+    // Select the function depending on the field type.
+    switch ($field_type) {
+      case 'entity_reference':
+        $wasModified = $get_er_value;
+        break;
+
+      default:
+        $wasModified = $get_value;
+    }
+
+    // If a field has been modified exit and return true.
+    if ($wasModified($field_name)) {
+      return TRUE;
+    }
   }
   return FALSE;
 }
@@ -272,13 +381,6 @@ function cgov_site_section_entity_presave($entity) {
     if ($entity->hasField('field_pretty_url') && !empty($entity->get('field_pretty_url'))) {
       $field_pretty_url = $entity->get('field_pretty_url')->value;
       $entity->set('field_pretty_url', strtolower($field_pretty_url));
-    }
-  }
-
-  // Determine if this term meets the criteria for cache tag invalidation.
-  if ($entityType === 'taxonomy_term' && $entity->hasField('field_site_section')) {
-    if (will_trigger_cache_tag_i1nvalidation($entity)) {
-      invalidate_section_cache_tag($entity);
     }
   }
 }
