@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains cgov_mail_plugin.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function cgov_mail_plugin_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the cgov_mail_plugin module.
+    case 'help.page.cgov_mail_plugin':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Mail backend for Cancer.gov') . '</p>';
+      return $output;
+
+    default:
+  }
+}

@@ -7,6 +7,11 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
+/**
+ * Set the mail logger.
+ */
+$config['system.mail']['interface']['default'] = 'cgov_logger';
+
  /*
  * Set the translation path to allow for easy management of third-party
  * translation files. The installer ignores the path for the initial install,
@@ -17,7 +22,7 @@
  * path because it is hardcoded in the installer code.
  * https://www.drupal.org/project/drupal/issues/2689305
  */
-$config['locale.settings']['translation']['use_source'] = 'local';
+$config['locale.settings']['1translation']['use_source'] = 'local';
 $config['locale.settings']['translation']['path'] = DRUPAL_ROOT . '/translations';
 
 // Pass in the correct ACSF site name to build the sitemap.xml.

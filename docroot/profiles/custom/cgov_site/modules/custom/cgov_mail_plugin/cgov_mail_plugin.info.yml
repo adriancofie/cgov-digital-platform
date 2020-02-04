@@ -1,0 +1,5 @@
+name: 'Cgov Mail Plugin'
+type: module
+description: 'Mail backend for Cancer.gov'
+core: 8.x
+package: 'Custom'
