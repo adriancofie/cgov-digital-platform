@@ -1,0 +1,60 @@
+- entity: "node"
+  type: "cgov_home_landing"
+  langcode: en
+  status: 1
+  moderation_state:
+    value: 'published'
+  title: "NCI Annual Plan & Budget Proposal For Fiscal Year 2022"
+  title__ES:
+      value: "Spanish: NCI Annual Plan & Budget Proposal For Fiscal Year 2022"
+  field_page_description:
+    value: "Home and Landing Special Report"
+  field_page_description__ES:
+    value: "Spanish: Home and Landing Special Report "
+  field_browser_title:
+    value: "NCI Annual Plan"
+  field_browser_title__ES:
+    value: "Spanish - NCI Annual Plan"
+  field_pretty_url:
+    value: "special-report"
+  field_site_section:
+    - '#process':
+        callback: 'reference'
+        args:
+          - 'taxonomy_term'
+          - vid: 'cgov_site_sections'
+            computed_path: '/test'
+            langcode: 'en'
+  field_site_section__ES:
+    - '#process':
+        callback: 'reference'
+        args:
+          - 'taxonomy_term'
+          - vid: 'cgov_site_sections'
+            computed_path: '/test'
+            langcode: 'es'
+  field_page_style:
+    value: "special_report"
+  field_hero_banner:
+    ######## Begin Feature Row ###########
+    - entity: 'paragraph'
+      type: "cgov_hero_banner"
+      field_desktop_hero:
+      - '#process':
+          callback: 'file'
+          args:
+            - 'image'
+            - type: 'module'
+              filename: 'apfy22-hero-placeholder.jpg'
+        alt: 'AP FY 2022 Hero'
+      field_tablet_hero:
+        - '#process':
+            callback: 'file'
+            args:
+              - 'image'
+              - type: 'module'
+                filename: 'apfy22-hero-placeholder.jpg'
+          alt: 'AP FY 2022 Hero'
+      field_tagline:
+          - value: ""
+

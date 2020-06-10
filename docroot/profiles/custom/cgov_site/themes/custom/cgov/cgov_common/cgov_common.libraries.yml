@@ -36,6 +36,17 @@ homelanding:
     - core/jquery
     - core/jquery.ui
 
+specialreport:
+  css:
+    theme:
+      dist/css/Specialreport.css: { preprocess: false }
+  js:
+    dist/js/Specialreport.js: { preprocess: false }
+  dependencies:
+    - core/jquery
+    - core/jquery.ui
+
+
 pdq:
   css:
     theme:
