@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.borderless_card_image
+label: 'Image: Borderless Card'
+targetEntityType: media
+cache: true
