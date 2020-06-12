@@ -18,14 +18,78 @@
     max-width: none;
 }
 
+
+/********************* BEGIN Page Options styling ******************************************/
 .specialReport.main-content {
   padding: 0;
   background: #f7f8f3 }
 
+  li[class*="page-options--"] a,
+  li.social-share a{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid $color-link;
+    text-align: center;
+    
+    &::before{
+      display: inline-block;
+      vertical-align: middle;
+    }
 
-  .page-options-social-share--pinterest{
+    &::after{
+      content: '';
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    
+  }
+
+  .page-options {
+    ul {
+      flex-direction: column;
+      padding: 5px 0;
+    }
+    li {
+      margin: 5px 0;
+
+      &.page-options--print {
+        order: 4;
+        a {
+          &::before{
+            @include svg-sprite(print-redesign);
+          }
+        } 
+      }
+      
+      &.page-options--email {
+        order: 4;
+        a {
+        &::before{
+          @include svg-sprite(email-redesign);
+        }
+      }
+      }
+      &.social-share.social-share--twitter {
+        order: 2;
+        a{
+        &::before{
+          @include svg-sprite(twitter-redesign);
+        }
+      }
+      }
+      &.social-share.social-share--pinterest{
     display: none;
   }
+    }
+  }
+
   
 /********************* BEGIN Home Page Styles ******************************************/
 h1 {
